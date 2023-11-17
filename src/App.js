@@ -12,27 +12,20 @@ function App() {
   const [destinationLang, setDestinationLang] = useState('fr-CA');
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const fetchMovies = useCallback(async () => {
-    const url = `${BASE_URL}search/movie?api_key=${API_KEY}&query=${searchTitle}&language=${sourceLang}&page=1&include_adult=false`;
-    const req = new Request(url, {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'}
-    });
-    const response = await fetch(req);
-    return response.json().then(res => {
+  const fetchMovies = useCallback(() => {
+    fetch(`${BASE_URL}search/movie?api_key=${API_KEY}&query=${searchTitle}&language=${sourceLang}`)
+    .then(response => response.json())
+    .then(res => {
       setMovies(res.results.slice(0, NB_RESULTS));
-    }).catch(err => {
+    })
+    .catch(err => {
       console.error(err);
     });
   }, [searchTitle, sourceLang]);
-  const fetchMovieById = useCallback(async (id) => {
-    const url = `${BASE_URL}movie/${id}?api_key=${API_KEY}&language=${destinationLang}`;
-    const req = new Request(url, {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'}
-    });
-    const response = await fetch(req);
-    return response.json().then(res => {
+  const fetchMovieById = useCallback((id) => {
+    fetch(`${BASE_URL}movie/${id}?api_key=${API_KEY}&language=${destinationLang}`)
+    .then(response => response.json())
+    .then(res => {
       console.log(res);
       setSelectedMovie(res);
     }).catch(err => {
@@ -104,7 +97,7 @@ function App() {
           </select>
         </div>
       </div>
-      {movies ? getMoviesUl() : null}
+      {getMoviesUl()}
       {getSelectedMovieDetails()}
       <div>Destination lang: {destinationLang}</div>
     </div>
