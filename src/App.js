@@ -23,7 +23,7 @@ function App() {
     });
   }, [searchTitle, sourceLang]);
   const fetchMovieById = useCallback((id) => {
-    fetch(`${BASE_URL}movie/${id}?api_key=${API_KEY}&language=${destinationLang}`)
+    fetch(`${BASE_URL}movie/${id}?api_key=${API_KEY}&language=${destinationLang}&include_image_language=fr&append_to_response=credits`)
     .then(response => response.json())
     .then(res => {
       console.log(res);
@@ -32,26 +32,36 @@ function App() {
       console.error(err);
     });
   }, [destinationLang]);
-  const getMoviesUl = () => {
-    return (<ul>
-      {movies.map((x, i) => (
-        <li key={i} onClick={() => fetchMovieById(x.id)}>
-          <img src={getMoviePosterURL(x)} alt={x.title}/>
-          <span>{`${x.title} (${x.release_date.slice(0, 4)})`}</span>
-        </li>
-      ))}
-    </ul>);
-  };
   const getSelectedMovieDetails = () => {
     return selectedMovie ? (
       <>
         <img src={getMoviePosterURL(selectedMovie)} alt={selectedMovie.title}/>
-        <span>{selectedMovie.title}</span>
+        <span>{selectedMovie.title} ({getMovieReleaseYear(selectedMovie)})</span>
+        <span>By {getMovieDirector(selectedMovie)}</span>
       </>
     ) : null
   };
+  const getMovieReleaseYear = (movie) => movie?.release_date.slice(0, 4);
+  const getMovieDirector = (movie) => movie?.credits?.crew?.find(member => member.job === 'Director')?.name;
   const getMoviePosterURL = (movie, width = 200) => {
-    return `${BASE_URL_IMG}w${width}${movie.poster_path}`;
+    return movie.poster_path ? `${BASE_URL_IMG}w${width}${movie.poster_path}` : '';
+  };
+  const getFormattedMovies = movies.map((movie) => ({
+    title: movie.title,
+    subtitle: getMovieReleaseYear(movie),
+    img: getMoviePosterURL(movie),
+    id: movie.id,
+  }));
+  const handleMovieSearchInput = (value) => {
+    console.log(value)
+    setSearchTitle(value);
+    if (value) {
+      fetchMovies();
+    }
+  };
+  const handleMovieSelect = (item) => {
+    fetchMovieById(item.id);
+    setSearchTitle('');
   };
   const onChangeSourceLang = (event) => {
     setSourceLang(event.target.value);
@@ -59,17 +69,6 @@ function App() {
   const onChangeDestinationLang = (event) => {
     setDestinationLang(event.target.value);
   };
-  const onTitleInput = (event) => {
-    const val = event.target.value;
-    if (!val) {
-      setMovies([]);
-      return;
-    }
-    setSearchTitle(event.target.value);
-  };
-  useEffect(() => {
-    fetchMovies();
-  }, [sourceLang, fetchMovies]);
   useEffect(() => {
     if (selectedMovie) {
       fetchMovieById(selectedMovie.id);
@@ -97,7 +96,11 @@ function App() {
           </select>
         </div>
       </div>
-      {getMoviesUl()}
+      <SearchDropdown value={selectedMovie}
+                      items={getFormattedMovies}
+                      handleSearchInput={handleMovieSearchInput}
+                      handleItemSelect={handleMovieSelect}
+      />
       {getSelectedMovieDetails()}
       <div>Destination lang: {destinationLang}</div>
     </div>
