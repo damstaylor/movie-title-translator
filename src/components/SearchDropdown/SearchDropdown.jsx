@@ -13,7 +13,7 @@ const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => 
     setSearchValue('');
   };
   return (
-    <>
+    <div className="SearchDropdown">
       <SearchDropdown.Input label="Search movie"
                             placeholder="Search movie title"
                             value={searchValue}
