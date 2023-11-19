@@ -28,6 +28,13 @@ const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => 
   );
 };
 
+SearchDropdown.propTypes = {
+  value: PropTypes.object,
+  items: PropTypes.array,
+  handleSearchInput: PropTypes.func,
+  handleItemSelect: PropTypes.func,
+};
+
 SearchDropdown.Input = SearchDropdownInput;
 SearchDropdown.Panel = SearchDropdownPanel;
 
