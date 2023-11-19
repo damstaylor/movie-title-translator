@@ -19,12 +19,12 @@ const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => 
                             value={searchValue}
                             handleInput={handleSearch}
       />
-      {searchValue.length > 0 ?
+      {searchValue.length > 0 &&
         <SearchDropdown.Panel items={items}
                               onClick={handleItemClick}
-        /> :
-        null}
-    </>
+        />
+      }
+    </div>
   );
 };
 
