@@ -1,3 +1,4 @@
+import SearchDropdown from './components/SearchDropdown/SearchDropdown';
 import './App.css';
 import {useCallback, useEffect, useState} from 'react';
 
