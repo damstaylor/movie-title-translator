@@ -5,15 +5,18 @@ import PropTypes from 'prop-types';
 import './SearchDropdown.css';
 
 const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => {
+  const [selectedItem, setSelectedItem] = useState(value || null);
   const [searchValue, setSearchValue] = useState('');
   const handleSearch = (newVal) => {
     setSearchValue(newVal);
     handleSearchInput(newVal);
   };
   const cancelSearch = () => {
+    setSelectedItem(null);
     setSearchValue('');
   };
   const handleItemClick = (item) => {
+    setSelectedItem(item);
     handleItemSelect(item);
   };
   return (
