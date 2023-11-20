@@ -97,7 +97,7 @@ function App() {
           </select>
         </div>
         <div className="search-options-destination">
-          <span>Translate to:</span>
+          <span>Translate to</span>
           <select defaultValue="fr-CA" onChange={(event) => onChangeDestinationLang(event)}>
             <option value="en-US">English (USA)</option>
             <option value="fr-CA">Français (Canada)</option>
