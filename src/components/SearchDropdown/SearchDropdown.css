@@ -1,0 +1,17 @@
+.SearchDropdown {
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+.SearchDropdown .labels {
+  width: calc(100% - 32px);
+}
+
+.search-options {
+  margin-bottom: 10px;
+}
+
+.search-options-source, .search-options-destination {
+  text-align: center;
+  margin-bottom: 10px;
+}

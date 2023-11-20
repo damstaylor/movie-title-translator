@@ -1,3 +1,4 @@
+import 'tailwindcss/tailwind.css';
 import SearchDropdown from './components/SearchDropdown/SearchDropdown';
 import './App.css';
 import {useCallback, useEffect, useState} from 'react';
@@ -36,13 +37,21 @@ function App() {
   const getSelectedMovieDetails = () => {
     return selectedMovie ? (
       <>
-        <img src={getMoviePosterURL(selectedMovie)} alt={selectedMovie.title}/>
-        <span>{selectedMovie.title} ({getMovieReleaseYear(selectedMovie)})</span>
+        <img className="mb-2" src={getMoviePosterURL(selectedMovie)} alt={selectedMovie.title}/>
+        <span className="font-bold text-xl">{selectedMovie.title}</span>
         <span>By {getMovieDirector(selectedMovie)}</span>
+        <span>Released on {getMovieReleaseDate()}</span>
       </>
-    ) : null
+    ) : null;
   };
   const getMovieReleaseYear = (movie) => movie?.release_date.slice(0, 4);
+  const getMovieReleaseDate = (movie) => {
+    return new Date(selectedMovie.release_date).toLocaleDateString('en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
   const getMovieDirector = (movie) => movie?.credits?.crew?.find(member => member.job === 'Director')?.name;
   const getMoviePosterURL = (movie, width = 200) => {
     return movie.poster_path ? `${BASE_URL_IMG}w${width}${movie.poster_path}` : '';
@@ -54,7 +63,7 @@ function App() {
     id: movie.id,
   }));
   const handleMovieSearchInput = (value) => {
-    console.log(value)
+    console.log(value);
     setSearchTitle(value);
     if (value) {
       fetchMovies();
@@ -77,18 +86,17 @@ function App() {
   }, [destinationLang, fetchMovieById]);
   return (
     <div className="App">
-      <div className="container">
-        <div>Source lang: {sourceLang}</div>
-        <div>
+      <h1 className="text-4xl font-bold text-blue-500 mb-5">Movie title translator</h1>
+      <div className="search-options">
+        <div className="search-options-source">
           <span>Search movie or TV show title in</span>
           <select defaultValue="en-US" onChange={(event) => onChangeSourceLang(event)}>
             <option value="en-US">English (USA)</option>
             <option value="fr-CA">Français (Canada)</option>
             <option value="fr-FR">Français (France)</option>
           </select>
-          <input placeholder="Type here" value={searchTitle} onInput={onTitleInput}/>
         </div>
-        <div>
+        <div className="search-options-destination">
           <span>Translate to:</span>
           <select defaultValue="fr-CA" onChange={(event) => onChangeDestinationLang(event)}>
             <option value="en-US">English (USA)</option>
@@ -103,7 +111,6 @@ function App() {
                       handleItemSelect={handleMovieSelect}
       />
       {getSelectedMovieDetails()}
-      <div>Destination lang: {destinationLang}</div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => 
   const handleItemClick = (item) => {
     setSelectedItem(item);
     handleItemSelect(item);
+    cancelSearch();
   };
   return (
     <div className="SearchDropdown relative">
