@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import SearchDropdownInput from "./SearchDropdownInput";
-import SearchDropdownPanel from "./SearchDropdownPanel";
+import SearchDropdownInput from './SearchDropdownInput';
+import SearchDropdownPanel from './SearchDropdownPanel';
+import PropTypes from 'prop-types';
+import './SearchDropdown.css';
 
 const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => {
   const [searchValue, setSearchValue] = useState('');
@@ -8,16 +10,18 @@ const SearchDropdown = ({value, items, handleSearchInput, handleItemSelect}) => 
     setSearchValue(newVal);
     handleSearchInput(newVal);
   };
-  const handleItemClick = (item) => {
-    handleItemSelect(item);
+  const cancelSearch = () => {
     setSearchValue('');
   };
+  const handleItemClick = (item) => {
+    handleItemSelect(item);
+  };
   return (
-    <div className="SearchDropdown">
-      <SearchDropdown.Input label="Search movie"
-                            placeholder="Search movie title"
+    <div className="SearchDropdown relative">
+      <SearchDropdown.Input placeholder="Search movie title"
                             value={searchValue}
-                            handleInput={handleSearch}
+                            onInput={handleSearch}
+                            onCancel={cancelSearch}
       />
       {searchValue.length > 0 &&
         <SearchDropdown.Panel items={items}
