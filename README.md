@@ -8,6 +8,4 @@ For instance, <i>The Hangover</i> (2009)'s title in France is <i>Very Bad Trip</
 
 I had the idea of making this little app that could translate me a movie title from a language to another. Check it for yourself soon!
 
-![screenshot.png](public%2Fscreenshot.png)
-
 Made with React and Tailwind CSS
