@@ -37,29 +37,35 @@ function App() {
   const getSelectedMovieDetails = () => {
     return selectedMovie ? (
       <>
-        <img className="mb-2" src={getMoviePosterURL(selectedMovie)} alt={selectedMovie.title}/>
+        <img className="mb-2" src={getPosterURL(selectedMovie)} alt={selectedMovie.title}/>
         <span className="font-bold text-xl">{selectedMovie.title}</span>
-        <span>By {getMovieDirector(selectedMovie)}</span>
-        <span>Released on {getMovieReleaseDate()}</span>
+        <span>By {getDirector(selectedMovie)}</span>
+        <div className="details text-xs flex flex-col items-center text-gray-500">
+          <span>Released on {getMovieReleaseDate(selectedMovie)}</span>
+          <span>Starring {getCast(selectedMovie).join(', ')}</span>
+          <span>{getDuration(selectedMovie)}</span>
+          <span>Original title: <span className="italic">{getOriginalTitle(selectedMovie)}</span></span>
+        </div>
       </>
     ) : null;
   };
   const getMovieReleaseYear = (movie) => movie?.release_date.slice(0, 4);
   const getMovieReleaseDate = (movie) => {
-    return new Date(selectedMovie.release_date).toLocaleDateString('en-GB', {
+    return new Date(movie.release_date).toLocaleDateString('en-GB', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
   };
-  const getMovieDirector = (movie) => movie?.credits?.crew?.find(member => member.job === 'Director')?.name;
-  const getMoviePosterURL = (movie, width = 200) => {
-    return movie.poster_path ? `${BASE_URL_IMG}w${width}${movie.poster_path}` : '';
-  };
+  const getDirector = (movie) => movie?.credits?.crew?.find(member => member.job === 'Director')?.name;
+  const getCast = (movie, nb = 4) => movie?.credits?.cast?.map(member => member.name).slice(0, nb);
+  const getOriginalTitle = (movie) => movie?.original_title;
+  const getDuration = (movie) => (movie.runtime >= 60 ? `${Math.floor(movie.runtime / 60)}h` : '') + `${movie.runtime % 60}min`;
+  const getPosterURL = (movie, width = 200) => movie?.poster_path ? `${BASE_URL_IMG}w${width}${movie.poster_path}` : '';
   const getFormattedMovies = movies.map((movie) => ({
     title: movie.title,
     subtitle: getMovieReleaseYear(movie),
-    img: getMoviePosterURL(movie),
+    img: getPosterURL(movie),
     id: movie.id,
   }));
   const handleMovieSearchInput = (value) => {
